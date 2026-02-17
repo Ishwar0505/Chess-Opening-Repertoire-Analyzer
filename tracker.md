@@ -68,17 +68,17 @@
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 4.1 | Create `src/data/openingThemes.js` — ECO theme database | ⬜ | |
-| 4.2 | Create `src/analysis/strategy.js` — insight generation | ⬜ | |
-| 4.3 | Create `src/hooks/useAnalysis.js` — combine themes + master data | ⬜ | |
-| 4.4 | Add middlegame ideas section to OpeningCard | ⬜ | |
-| 4.5 | Add attacking strategies section to OpeningCard | ⬜ | |
-| 4.6 | Add tactical motifs section to OpeningCard | ⬜ | |
-| 4.7 | Create `src/services/cloudEvalApi.js` — cloud eval client | ⬜ | |
-| 4.8 | Show engine evaluation for critical positions | ⬜ | |
-| 4.9 | Expand openingThemes.js to full A00-E99 coverage | ⬜ | |
+| 4.1 | Create `src/data/openingThemes.js` — ECO theme database | ✅ | 30+ entries covering A00-E99 |
+| 4.2 | Create `src/analysis/strategy.js` — insight generation | ✅ | ECO range lookup + insight formatting |
+| 4.3 | Create `src/hooks/useAnalysis.js` — combine themes + master data | ✅ | useMemo-based, color-aware |
+| 4.4 | Add middlegame ideas section to OpeningCard | ✅ | Player + opponent plans |
+| 4.5 | Add attacking strategies section to OpeningCard | ✅ | Per-opening attacking ideas |
+| 4.6 | Add tactical motifs section to OpeningCard | ✅ | Per-opening tactical patterns |
+| 4.7 | Create `src/services/cloudEvalApi.js` — cloud eval client | ✅ | FEN generation + Lichess cloud eval |
+| 4.8 | Show engine evaluation for critical positions | ✅ | Eval badge in OpeningCard header |
+| 4.9 | Expand openingThemes.js to full A00-E99 coverage | ✅ | All major ECO families covered |
 
-**Phase 4 deliverable:** Full strategic analysis with middlegame ideas, tactics, and attacking plans.
+**Phase 4 deliverable:** ✅ Full strategic analysis with middlegame ideas, tactics, and attacking plans.
 
 ---
 
@@ -106,9 +106,9 @@
 | Phase 1: Foundation | 11 | 11 | 100% |
 | Phase 2: Repertoire | 9 | 9 | 100% |
 | Phase 3: Masters | 9 | 9 | 100% |
-| Phase 4: Strategy | 9 | 0 | 0% |
+| Phase 4: Strategy | 9 | 9 | 100% |
 | Phase 5: Polish | 8 | 0 | 0% |
-| **Total** | **46** | **29** | **63%** |
+| **Total** | **46** | **38** | **83%** |
 
 ---
 
@@ -117,3 +117,4 @@
 - **Phase 1:** Vite scaffolded with React 19 (latest). Build produces 64KB gzipped JS, well under 200KB target. Using CSS Modules for all component styling. Request queue implements 100ms minimum delay between API calls and 60s pause on HTTP 429.
 - **Phase 2:** Repertoire analysis groups games by ECO code per color. Dashboard has 6 sort options (frequency, win rate, ECO, name, recent, avg rating). PlayerInfo shows ratings for all time controls. StatBar shows per-opening and aggregate W/D/L. Build: 66KB gzipped JS.
 - **Phase 3:** Chess position tracker handles SAN→UCI conversion for querying masters explorer API. Master stats fetched progressively for all openings (cached 24hr). OpeningCard shows player vs master stats, move-by-move comparison with match %, and expandable top master games with PGN viewer. Dashboard table has new "Masters" column. Build: 70KB gzipped JS.
+- **Phase 4:** Opening themes database covers all ECO families (A00-E99) with 30+ entries. Strategy engine maps ECO codes to middlegame ideas, attacking strategies, and tactical motifs (color-aware). Cloud eval API fetches Stockfish evaluations from Lichess cloud cache. OpeningCard now shows: pawn structures, middlegame ideas (yours + opponent's plans), attacking strategies, tactical motifs, and engine eval badge. FEN generation added to chess.js. Build: 81KB gzipped JS.

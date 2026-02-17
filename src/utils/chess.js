@@ -276,6 +276,60 @@ export function sanMovesToUci(sanMoves) {
 }
 
 /**
+ * Convert a position to a FEN string.
+ */
+export function positionToFen(pos, ply = 0) {
+  let fen = '';
+
+  for (let r = 7; r >= 0; r--) {
+    let empty = 0;
+    for (let c = 0; c < 8; c++) {
+      const p = pos.board[r][c];
+      if (p) {
+        if (empty > 0) { fen += empty; empty = 0; }
+        fen += p;
+      } else {
+        empty++;
+      }
+    }
+    if (empty > 0) fen += empty;
+    if (r > 0) fen += '/';
+  }
+
+  fen += ' ' + pos.turn;
+
+  let castling = '';
+  if (pos.castling.K) castling += 'K';
+  if (pos.castling.Q) castling += 'Q';
+  if (pos.castling.k) castling += 'k';
+  if (pos.castling.q) castling += 'q';
+  fen += ' ' + (castling || '-');
+
+  fen += ' ' + (pos.epSquare ? sq(pos.epSquare[0], pos.epSquare[1]) : '-');
+  fen += ' 0 ' + (Math.floor(ply / 2) + 1);
+
+  return fen;
+}
+
+/**
+ * Apply a series of SAN moves and return the resulting FEN.
+ */
+export function movesToFen(sanMoves) {
+  const pos = createPosition();
+  const sans = typeof sanMoves === 'string'
+    ? sanMoves.split(/\s+/).filter(Boolean)
+    : sanMoves;
+
+  let ply = 0;
+  for (const san of sans) {
+    if (!applyMove(pos, san)) break;
+    ply++;
+  }
+
+  return positionToFen(pos, ply);
+}
+
+/**
  * Parse PGN text into an object with headers and moves array.
  */
 export function parsePGN(pgn) {

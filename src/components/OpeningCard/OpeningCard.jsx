@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useOpeningAnalysis } from '../../hooks/useMasterData';
+import { useAnalysis } from '../../hooks/useAnalysis';
 import { getMasterStats, fetchTopGamePGNs } from '../../analysis/masterMatch';
-import { parsePGN } from '../../utils/chess';
+import { getCloudEval } from '../../services/cloudEvalApi';
+import { parsePGN, movesToFen } from '../../utils/chess';
+import { useAppState } from '../../context/AppContext';
 import StatBar from '../common/StatBar';
 import LoadingSpinner from '../common/LoadingSpinner';
 import styles from './OpeningCard.module.css';
@@ -13,17 +16,21 @@ function resultLabel(winner) {
 }
 
 export default function OpeningCard({ opening }) {
+  const { activeColor } = useAppState();
   const [masterStats, setMasterStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(false);
   const [topGames, setTopGames] = useState(null);
   const [expandedGame, setExpandedGame] = useState(null);
+  const [cloudEval, setCloudEval] = useState(null);
   const { analysis, loading: analysisLoading } = useOpeningAnalysis(opening);
+  const { strategy } = useAnalysis(opening, activeColor);
 
-  // Fetch master stats when opening changes
+  // Fetch master stats + cloud eval when opening changes
   useEffect(() => {
     if (!opening?.moves) {
       setMasterStats(null);
       setTopGames(null);
+      setCloudEval(null);
       return;
     }
 
@@ -31,6 +38,7 @@ export default function OpeningCard({ opening }) {
     setStatsLoading(true);
     setTopGames(null);
     setExpandedGame(null);
+    setCloudEval(null);
 
     getMasterStats(opening.moves)
       .then(stats => {
@@ -38,7 +46,6 @@ export default function OpeningCard({ opening }) {
         setMasterStats(stats);
         setStatsLoading(false);
 
-        // Fetch PGNs for top games
         if (stats?.topGames?.length > 0) {
           fetchTopGamePGNs(stats.topGames).then(games => {
             if (!cancelled) setTopGames(games);
@@ -48,6 +55,14 @@ export default function OpeningCard({ opening }) {
       .catch(() => {
         if (!cancelled) setStatsLoading(false);
       });
+
+    // Fetch cloud eval for this position
+    const fen = movesToFen(opening.moves);
+    if (fen) {
+      getCloudEval(fen).then(evalData => {
+        if (!cancelled) setCloudEval(evalData);
+      });
+    }
 
     return () => { cancelled = true; };
   }, [opening?.eco, opening?.name, opening?.moves]);
@@ -59,6 +74,17 @@ export default function OpeningCard({ opening }) {
       <header className={styles.header}>
         <span className={styles.eco}>{opening.eco}</span>
         <h3 className={styles.name}>{opening.name}</h3>
+        {strategy && (
+          <span className={styles.familyBadge}>{strategy.family}</span>
+        )}
+        {cloudEval && (
+          <span
+            className={`${styles.evalBadge} ${cloudEval.evalNum > 0.3 ? styles.evalWhite : cloudEval.evalNum < -0.3 ? styles.evalBlack : styles.evalEqual}`}
+            title={`Depth ${cloudEval.depth}`}
+          >
+            {cloudEval.evalText}
+          </span>
+        )}
       </header>
 
       <div className={styles.statsGrid}>
@@ -116,6 +142,77 @@ export default function OpeningCard({ opening }) {
           )}
         </div>
       </div>
+
+      {/* Strategy sections */}
+      {strategy && (
+        <>
+          {/* Pawn structures */}
+          {strategy.structures.length > 0 && (
+            <div className={styles.section}>
+              <h4 className={styles.sectionTitle}>Pawn Structures</h4>
+              <div className={styles.tagList}>
+                {strategy.structures.map(s => (
+                  <span key={s} className={styles.tag}>{s}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Middlegame ideas */}
+          {strategy.middlegameIdeas.length > 0 && (
+            <div className={styles.section}>
+              <h4 className={styles.sectionTitle}>
+                Middlegame Ideas
+                <span className={styles.colorLabel}>as {activeColor}</span>
+              </h4>
+              <ul className={styles.insightList}>
+                {strategy.middlegameIdeas.map((idea, i) => (
+                  <li key={i}>{idea}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Opponent plans */}
+          {strategy.opponentPlans.length > 0 && (
+            <div className={styles.section}>
+              <h4 className={styles.sectionTitle}>
+                Opponent&rsquo;s Plans
+                <span className={styles.colorLabel}>as {activeColor === 'white' ? 'black' : 'white'}</span>
+              </h4>
+              <ul className={styles.insightList}>
+                {strategy.opponentPlans.map((plan, i) => (
+                  <li key={i}>{plan}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Attacking strategies */}
+          {strategy.attackingStrategies.length > 0 && (
+            <div className={styles.section}>
+              <h4 className={styles.sectionTitle}>Attacking Strategies</h4>
+              <ul className={styles.insightList}>
+                {strategy.attackingStrategies.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Tactical motifs */}
+          {strategy.tacticalMotifs.length > 0 && (
+            <div className={styles.section}>
+              <h4 className={styles.sectionTitle}>Tactical Motifs</h4>
+              <ul className={styles.insightList}>
+                {strategy.tacticalMotifs.map((t, i) => (
+                  <li key={i}>{t}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
+      )}
 
       {/* Move-by-move comparison */}
       <div className={styles.section}>
