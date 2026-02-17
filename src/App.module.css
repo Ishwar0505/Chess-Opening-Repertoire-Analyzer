@@ -52,6 +52,31 @@
   line-height: 1.7;
 }
 
+.featureList {
+  list-style: none;
+  text-align: left;
+  max-width: 500px;
+  margin: 1.5rem auto 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.featureList li::before {
+  content: "\2713\0020";
+  color: var(--success);
+  font-weight: 700;
+}
+
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
 .footer {
   text-align: center;
   padding: 1rem;

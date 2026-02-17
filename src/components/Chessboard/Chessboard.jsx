@@ -126,6 +126,8 @@ function Chessboard({ board, flipped = false, size = 320, lastMove }) {
         width="100%"
         height="100%"
         className={styles.board}
+        role="img"
+        aria-label="Chess board position"
       >
         {squares}
         {labels}

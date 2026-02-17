@@ -37,7 +37,7 @@ export default function Dashboard({ games, username }) {
   );
 
   return (
-    <div className={styles.dashboard}>
+    <section className={styles.dashboard} aria-label="Opening repertoire dashboard">
       <div className={styles.controls}>
         <TabBar
           tabs={COLOR_TABS}
@@ -128,6 +128,6 @@ export default function Dashboard({ games, username }) {
           })}
         </div>
       )}
-    </div>
+    </section>
   );
 }

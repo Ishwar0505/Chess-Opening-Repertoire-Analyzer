@@ -3,7 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chess Opening Repertoire Analyzer</title>
+
+    <!-- Primary Meta Tags -->
+    <title>Chess Opening Repertoire Analyzer | Lichess Opening Analysis Tool</title>
+    <meta name="description" content="Analyze your chess opening repertoire with data from Lichess. Compare your moves against master games, discover middlegame ideas, attacking strategies, and tactical patterns for every opening you play." />
+    <meta name="keywords" content="chess opening analyzer, chess repertoire, lichess opening analysis, chess opening study, master games comparison, chess middlegame ideas, ECO codes, chess tactics" />
+    <meta name="author" content="Ishwar" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://chess-opening-repertoire-analyzer.vercel.app/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://chess-opening-repertoire-analyzer.vercel.app/" />
+    <meta property="og:title" content="Chess Opening Repertoire Analyzer" />
+    <meta property="og:description" content="Analyze your Lichess chess opening repertoire. Compare moves against master games, discover middlegame strategies and tactical patterns." />
+    <meta property="og:site_name" content="Chess Opening Repertoire Analyzer" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Chess Opening Repertoire Analyzer" />
+    <meta name="twitter:description" content="Analyze your Lichess chess opening repertoire. Compare moves against master games, discover middlegame strategies and tactical patterns." />
+
+    <!-- Theme & Favicon -->
+    <meta name="theme-color" content="#1a1a2e" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Performance: Preconnect to API domains -->
+    <link rel="preconnect" href="https://lichess.org" />
+    <link rel="dns-prefetch" href="https://lichess.org" />
+    <link rel="preconnect" href="https://explorer.lichess.ovh" />
+    <link rel="dns-prefetch" href="https://explorer.lichess.ovh" />
+
+    <!-- Structured Data: JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Chess Opening Repertoire Analyzer",
+      "description": "Analyze your chess opening repertoire with data from Lichess. Compare your moves against master games, discover middlegame ideas, attacking strategies, and tactical patterns.",
+      "url": "https://chess-opening-repertoire-analyzer.vercel.app/",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript and a modern browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Lichess game import and analysis",
+        "Opening repertoire extraction by ECO code",
+        "Master game comparison with move-by-move matching",
+        "Win/draw/loss statistics per opening",
+        "Middlegame ideas and attacking strategies",
+        "Tactical motif identification",
+        "Pawn structure analysis",
+        "Cloud Stockfish evaluation",
+        "Interactive chessboard with PGN viewer"
+      ],
+      "softwareVersion": "1.0.0",
+      "author": {
+        "@type": "Person",
+        "name": "Ishwar",
+        "url": "https://github.com/Ishwar0505"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

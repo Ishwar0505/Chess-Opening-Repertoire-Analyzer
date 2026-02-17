@@ -72,7 +72,7 @@ export default function OpeningCard({ opening }) {
   if (!opening) return null;
 
   return (
-    <div className={styles.card}>
+    <article className={styles.card} aria-label={`${opening.eco} ${opening.name} analysis`}>
       <header className={styles.header}>
         <span className={styles.eco}>{opening.eco}</span>
         <h3 className={styles.name}>{opening.name}</h3>
@@ -263,7 +263,7 @@ export default function OpeningCard({ opening }) {
           </div>
         </div>
       )}
-    </div>
+    </article>
   );
 }
 

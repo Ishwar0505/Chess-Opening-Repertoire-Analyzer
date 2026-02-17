@@ -1,0 +1,18 @@
+{
+  "name": "Chess Opening Repertoire Analyzer",
+  "short_name": "Chess Openings",
+  "description": "Analyze your Lichess chess opening repertoire. Compare moves against master games, discover middlegame strategies and tactical patterns.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["games", "utilities"],
+  "lang": "en"
+}

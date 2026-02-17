@@ -64,6 +64,7 @@ export default function SearchBar() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           disabled={gamesLoading}
+          aria-label="Lichess username"
         />
 
         <select
@@ -71,6 +72,7 @@ export default function SearchBar() {
           value={perfType}
           onChange={(e) => setPerfType(e.target.value)}
           disabled={gamesLoading}
+          aria-label="Time control"
         >
           {PERF_TYPES.map((pt) => (
             <option key={pt.value} value={pt.value}>
