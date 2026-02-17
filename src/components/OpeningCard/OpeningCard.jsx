@@ -7,6 +7,8 @@ import { parsePGN, movesToFen } from '../../utils/chess';
 import { useAppState } from '../../context/AppContext';
 import StatBar from '../common/StatBar';
 import LoadingSpinner from '../common/LoadingSpinner';
+import MoveTree from '../MoveTree/MoveTree';
+import GameViewer from '../GameViewer/GameViewer';
 import styles from './OpeningCard.module.css';
 
 function resultLabel(winner) {
@@ -214,45 +216,17 @@ export default function OpeningCard({ opening }) {
         </>
       )}
 
-      {/* Move-by-move comparison */}
+      {/* Move-by-move comparison with interactive board */}
       <div className={styles.section}>
-        <h4 className={styles.sectionTitle}>
-          Move Comparison
-          {analysis && (
-            <span className={styles.matchBadge}>
-              {analysis.matchPercent}% match
-            </span>
-          )}
-        </h4>
+        <h4 className={styles.sectionTitle}>Move Comparison</h4>
         {analysisLoading ? (
           <LoadingSpinner message="Analyzing moves..." />
         ) : analysis && analysis.comparisons.length > 0 ? (
-          <div className={styles.moveList}>
-            {analysis.comparisons.map((c, i) => (
-              <div
-                key={i}
-                className={`${styles.moveItem} ${c.matches ? styles.moveMatch : c.isInMasterDB ? styles.moveAlt : styles.moveDiverge}`}
-              >
-                <span className={styles.moveNumber}>
-                  {c.color === 'white' ? `${Math.ceil(c.ply / 2)}.` : '...'}
-                </span>
-                <span className={styles.moveText}>{c.playerMove}</span>
-                {c.matches ? (
-                  <span className={styles.moveStatus} title="Matches top master choice">
-                    &#10003;
-                  </span>
-                ) : c.masterMoves.length > 0 ? (
-                  <span className={styles.moveStatus} title={`Master prefers: ${c.masterMoves[0].san}`}>
-                    {c.masterMoves[0].san}
-                  </span>
-                ) : (
-                  <span className={styles.moveStatus} title="Not in master database">
-                    &#8212;
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
+          <MoveTree
+            comparisons={analysis.comparisons}
+            matchPercent={analysis.matchPercent}
+            playerMoves={opening.moves}
+          />
         ) : !analysisLoading ? (
           <p className={styles.statDetail}>No move data available</p>
         ) : null}
@@ -281,6 +255,7 @@ export default function OpeningCard({ opening }) {
                 {expandedGame === game.id && game.pgn && (
                   <div className={styles.gamePgn}>
                     <PgnDisplay pgn={game.pgn} />
+                    <GameViewerFromPgn pgn={game.pgn} />
                   </div>
                 )}
               </div>
@@ -288,6 +263,17 @@ export default function OpeningCard({ opening }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function GameViewerFromPgn({ pgn }) {
+  const { moves } = parsePGN(pgn);
+  if (moves.length === 0) return null;
+
+  return (
+    <div className={styles.gameViewerWrap}>
+      <GameViewer moves={moves} boardSize={260} />
     </div>
   );
 }

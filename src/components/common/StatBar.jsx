@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import styles from './common.module.css';
 
-export default function StatBar({ wins, draws, losses, total }) {
+export default memo(function StatBar({ wins, draws, losses, total }) {
   if (!total) return null;
 
   const winPct = (wins / total) * 100;
@@ -32,4 +33,4 @@ export default function StatBar({ wins, draws, losses, total }) {
       </div>
     </div>
   );
-}
+})

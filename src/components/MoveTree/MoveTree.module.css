@@ -1,0 +1,171 @@
+.container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.boardPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.posLabel {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-family: monospace;
+}
+
+.treePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.treeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.treeTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.matchLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--success);
+  background-color: var(--bg-elevated);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.treeGrid {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.treeGridHeader {
+  display: grid;
+  grid-template-columns: 3rem 1fr 1fr 3.5rem;
+  padding: 0.4rem 0.6rem;
+  background-color: var(--bg-elevated);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.treeRow {
+  display: grid;
+  grid-template-columns: 3rem 1fr 1fr 3.5rem;
+  padding: 0.35rem 0.6rem;
+  border: none;
+  border-top: 1px solid var(--border);
+  background: none;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: monospace;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  width: 100%;
+}
+
+.treeRow:hover {
+  background-color: rgba(233, 69, 96, 0.06);
+}
+
+.activeRow {
+  background-color: rgba(233, 69, 96, 0.12);
+}
+
+.moveNum {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.playerMove {
+  font-weight: 600;
+}
+
+.masterMove {
+  color: var(--text-secondary);
+}
+
+.status {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.statusMatch {
+  color: var(--success);
+}
+
+.statusAlt {
+  color: var(--warning);
+}
+
+.statusDiverge {
+  color: var(--accent);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dotMatch {
+  background-color: var(--success);
+}
+
+.dotAlt {
+  background-color: var(--warning);
+}
+
+.dotDiverge {
+  background-color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .boardPanel {
+    order: -1;
+  }
+}

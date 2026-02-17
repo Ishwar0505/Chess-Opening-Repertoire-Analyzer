@@ -59,3 +59,35 @@
   font-size: 0.8rem;
   border-top: 1px solid var(--border);
 }
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .header {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 0.75rem;
+  }
+
+  .title {
+    font-size: 0.95rem;
+  }
+
+  .welcome h2 {
+    font-size: 1.25rem;
+  }
+
+  .welcome p {
+    font-size: 0.9rem;
+  }
+}

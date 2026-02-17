@@ -1,11 +1,15 @@
+import { lazy, Suspense } from 'react';
 import { AppProvider, useAppState } from './context/AppContext';
 import SearchBar from './components/SearchBar/SearchBar';
 import PlayerInfo from './components/PlayerInfo/PlayerInfo';
 import Dashboard from './components/Dashboard/Dashboard';
-import OpeningCard from './components/OpeningCard/OpeningCard';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import ErrorMessage from './components/common/ErrorMessage';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import EmptyState from './components/common/EmptyState';
 import styles from './App.module.css';
+
+const OpeningCard = lazy(() => import('./components/OpeningCard/OpeningCard'));
 
 function AppContent() {
   const { username, profile, games, gamesLoading, gamesProgress, selectedOpening, error } = useAppState();
@@ -46,11 +50,19 @@ function AppContent() {
         )}
 
         {selectedOpening && !gamesLoading && (
-          <OpeningCard opening={selectedOpening} />
+          <ErrorBoundary fallbackMessage="Failed to render opening analysis. Try selecting a different opening.">
+            <Suspense fallback={<LoadingSpinner message="Loading analysis..." />}>
+              <OpeningCard opening={selectedOpening} />
+            </Suspense>
+          </ErrorBoundary>
         )}
 
         {!gamesLoading && profile && games.length === 0 && !error && (
-          <ErrorMessage message="No games found with these filters. Try different settings." />
+          <EmptyState
+            icon="&#9823;"
+            title="No Games Found"
+            message="No games found with these filters. Try a different time control, color, or increase the game limit."
+          />
         )}
       </main>
 
