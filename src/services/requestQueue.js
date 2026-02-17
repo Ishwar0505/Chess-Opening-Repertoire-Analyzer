@@ -41,9 +41,9 @@ class RequestQueue {
         const response = await fetch(url, options);
 
         if (response.status === 429) {
-          // Rate limited — wait 60 seconds
+          // Rate limited — re-queue the request and wait 60 seconds
           this.rateLimitedUntil = Date.now() + 60000;
-          reject(new Error('Rate limited by Lichess. Retrying in 60 seconds.'));
+          this.queue.unshift({ url, options, resolve, reject });
           continue;
         }
 
@@ -62,4 +62,8 @@ class RequestQueue {
   }
 }
 
+/** Queue for explorer.lichess.ovh (masters, player openings) */
 export const apiQueue = new RequestQueue(100);
+
+/** Separate queue for lichess.org API (cloud eval, game export, profiles) */
+export const lichessQueue = new RequestQueue(100);

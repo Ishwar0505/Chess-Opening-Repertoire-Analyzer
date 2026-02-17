@@ -3,7 +3,7 @@
  * Fetches Stockfish evaluations from the Lichess cloud analysis cache.
  */
 
-import { apiQueue } from './requestQueue';
+import { lichessQueue } from './requestQueue';
 import { cacheGet, cacheSet } from './cache';
 
 const BASE_URL = 'https://lichess.org';
@@ -27,7 +27,7 @@ export async function getCloudEval(fen, options = {}) {
   if (options.multiPv) params.set('multiPv', options.multiPv);
 
   try {
-    const response = await apiQueue.enqueue(
+    const response = await lichessQueue.enqueue(
       `${BASE_URL}/api/cloud-eval?${params}`
     );
 

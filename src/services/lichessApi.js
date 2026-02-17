@@ -1,4 +1,4 @@
-import { apiQueue } from './requestQueue';
+import { lichessQueue } from './requestQueue';
 import { cacheGet, cacheSet } from './cache';
 import { parseNdjsonStream } from '../utils/stream';
 
@@ -12,7 +12,7 @@ export async function fetchPlayerProfile(username) {
   const cached = cacheGet(cacheKey);
   if (cached) return cached;
 
-  const response = await apiQueue.enqueue(`${BASE_URL}/api/user/${username}`);
+  const response = await lichessQueue.enqueue(`${BASE_URL}/api/user/${username}`);
   const profile = await response.json();
 
   cacheSet(cacheKey, profile, 60); // cache 1 hour
@@ -46,7 +46,7 @@ export async function* streamPlayerGames(username, options = {}, onProgress) {
 
   const url = `${BASE_URL}/api/games/user/${username}?${params}`;
 
-  const response = await apiQueue.enqueue(url, {
+  const response = await lichessQueue.enqueue(url, {
     headers: { Accept: 'application/x-ndjson' },
   });
 
@@ -61,7 +61,7 @@ export async function fetchGame(gameId) {
   const cached = cacheGet(cacheKey);
   if (cached) return cached;
 
-  const response = await apiQueue.enqueue(
+  const response = await lichessQueue.enqueue(
     `${BASE_URL}/game/export/${gameId}`,
     { headers: { Accept: 'application/json' } }
   );
