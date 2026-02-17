@@ -1,0 +1,150 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Controls row: tabs + sort */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sortControl {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.sortControl select {
+  padding: 0.35rem 0.6rem;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
+
+/* Summary row */
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.summaryText {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.summaryBar {
+  flex: 1;
+  min-width: 150px;
+  max-width: 300px;
+}
+
+/* Table */
+.table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 55px 1fr 60px 65px 70px 140px;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+}
+
+.headerRow {
+  background-color: var(--bg-elevated);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dataRow {
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  font-family: inherit;
+}
+
+.dataRow:hover {
+  background-color: rgba(233, 69, 96, 0.08);
+}
+
+.selected {
+  background-color: rgba(233, 69, 96, 0.15);
+}
+
+.colEco {
+  font-weight: 600;
+  color: var(--accent);
+  font-family: monospace;
+}
+
+.colName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.colGames,
+.colWinRate,
+.colMasters {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.colMasters {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.colBar {
+  min-width: 0;
+}
+
+.empty {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 45px 1fr 45px 50px;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .colBar,
+  .colMasters {
+    display: none;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

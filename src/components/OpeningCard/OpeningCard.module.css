@@ -1,0 +1,262 @@
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.eco {
+  background-color: var(--bg-elevated);
+  color: var(--accent);
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Stats grid: player + master side by side */
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.statsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sectionTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.statDetail {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.masterMoves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.movesLabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  width: 100%;
+}
+
+.moveChip {
+  background-color: var(--bg-elevated);
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: monospace;
+}
+
+/* Move comparison section */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.matchBadge {
+  background-color: var(--bg-elevated);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  color: var(--success);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.moveList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.moveItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
+
+.moveMatch {
+  background-color: rgba(78, 204, 163, 0.15);
+}
+
+.moveAlt {
+  background-color: rgba(240, 192, 64, 0.15);
+}
+
+.moveDiverge {
+  background-color: rgba(233, 69, 96, 0.1);
+}
+
+.moveNumber {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  min-width: 1.5rem;
+}
+
+.moveText {
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.moveStatus {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-left: 0.15rem;
+}
+
+.moveMatch .moveStatus {
+  color: var(--success);
+}
+
+.moveDiverge .moveStatus {
+  color: var(--accent);
+}
+
+/* Top games section */
+.gameList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.gameEntry {
+  border-top: 1px solid var(--border);
+}
+
+.gameEntry:first-child {
+  border-top: none;
+}
+
+.gameButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background-color 0.15s;
+}
+
+.gameButton:hover {
+  background-color: rgba(233, 69, 96, 0.08);
+}
+
+.gamePlayers {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gameMeta {
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-left: 0.75rem;
+}
+
+.gamePgn {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--border);
+  background-color: var(--bg-elevated);
+}
+
+.pgnContent {
+  font-size: 0.8rem;
+}
+
+.pgnHeader {
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+  font-style: italic;
+}
+
+.pgnMoves {
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-family: monospace;
+  word-break: break-word;
+}
+
+.pgnMoveNum {
+  color: var(--text-muted);
+  margin-right: 0.15rem;
+}
+
+.pgnResult {
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .gameButton {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  .gameMeta {
+    margin-left: 0;
+  }
+}
