@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-3-5-sonnet-20241022',
         max_tokens: 150,
         messages: [
           {
@@ -48,10 +48,14 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      return res.status(response.status).json({
-        error: errData.error?.message || 'Claude API error',
-      });
+      const errText = await response.text().catch(() => '');
+      console.error('Claude API error:', response.status, errText);
+      let errMessage = 'Claude API error';
+      try {
+        const errData = JSON.parse(errText);
+        errMessage = errData.error?.message || errMessage;
+      } catch {}
+      return res.status(response.status).json({ error: errMessage });
     }
 
     const data = await response.json();
