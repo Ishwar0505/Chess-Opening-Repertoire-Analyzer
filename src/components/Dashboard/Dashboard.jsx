@@ -1,9 +1,13 @@
+import { useState, useMemo } from 'react';
 import { useAppState, useAppDispatch } from '../../context/AppContext';
 import { useRepertoire } from '../../hooks/useRepertoire';
 import { useMasterData } from '../../hooks/useMasterData';
+import { useDangerZoneData } from '../../hooks/usePracticalityGap';
 import TabBar from '../common/TabBar';
 import StatBar from '../common/StatBar';
 import styles from './Dashboard.module.css';
+
+const PAGE_SIZE = 10;
 
 const COLOR_TABS = [
   { value: 'white', label: 'White' },
@@ -22,8 +26,24 @@ const SORT_OPTIONS = [
 export default function Dashboard({ games, username }) {
   const { activeColor, sortBy, selectedOpening } = useAppState();
   const dispatch = useAppDispatch();
+  const [page, setPage] = useState(0);
   const { openings, totalGames } = useRepertoire(games, username, activeColor, sortBy);
   const { masterData, loading: masterLoading } = useMasterData(openings, username);
+  const { dangerData } = useDangerZoneData(openings, username);
+
+  const totalPages = Math.max(1, Math.ceil(openings.length / PAGE_SIZE));
+  const pagedOpenings = useMemo(
+    () => openings.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),
+    [openings, page]
+  );
+
+  // Reset page when color or sort changes
+  const currentKey = `${activeColor}-${sortBy}`;
+  const [prevKey, setPrevKey] = useState(currentKey);
+  if (currentKey !== prevKey) {
+    setPrevKey(currentKey);
+    setPage(0);
+  }
 
   // Aggregate stats for the active color
   const totals = openings.reduce(
@@ -89,11 +109,12 @@ export default function Dashboard({ games, username }) {
             <span className={styles.colBar}>W / D / L</span>
           </div>
 
-          {openings.map((opening) => {
+          {pagedOpenings.map((opening) => {
             const isSelected = selectedOpening?.eco === opening.eco
               && selectedOpening?.name === opening.name;
             const key = `${opening.eco}|${opening.name}`;
             const master = masterData[key];
+            const danger = dangerData[key];
 
             return (
               <button
@@ -107,7 +128,12 @@ export default function Dashboard({ games, username }) {
                 }
               >
                 <span className={styles.colEco}>{opening.eco}</span>
-                <span className={styles.colName}>{opening.name}</span>
+                <span className={styles.colName}>
+                  {opening.name}
+                  {danger?.isDangerZone && (
+                    <span className={styles.dangerBadge} title={danger.dangerDescription}>!</span>
+                  )}
+                </span>
                 <span className={styles.colGames}>{opening.games}</span>
                 <span className={styles.colWinRate}>
                   {Math.round(opening.winRate * 100)}%
@@ -126,6 +152,29 @@ export default function Dashboard({ games, username }) {
               </button>
             );
           })}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className={styles.pagination}>
+          <button
+            className={styles.pageButton}
+            onClick={() => setPage(p => p - 1)}
+            disabled={page === 0}
+          >
+            Prev
+          </button>
+          <span className={styles.pageInfo}>
+            {page + 1} / {totalPages}
+          </span>
+          <button
+            className={styles.pageButton}
+            onClick={() => setPage(p => p + 1)}
+            disabled={page >= totalPages - 1}
+          >
+            Next
+          </button>
         </div>
       )}
     </section>

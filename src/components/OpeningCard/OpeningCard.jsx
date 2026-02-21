@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useOpeningAnalysis } from '../../hooks/useMasterData';
 import { useAnalysis } from '../../hooks/useAnalysis';
+import { usePracticalityGap } from '../../hooks/usePracticalityGap';
+import { useStrategicTranslation } from '../../hooks/useStrategicTranslation';
 import { getMasterStats, fetchTopGamePGNs } from '../../analysis/masterMatch';
 import { getCloudEval } from '../../services/cloudEvalApi';
 import { parsePGN, movesToFen } from '../../utils/chess';
 import { useAppState } from '../../context/AppContext';
 import StatBar from '../common/StatBar';
 import LoadingSpinner from '../common/LoadingSpinner';
+import DangerZone from '../DangerZone/DangerZone';
 import MoveTree from '../MoveTree/MoveTree';
 import GameViewer from '../GameViewer/GameViewer';
 import styles from './OpeningCard.module.css';
@@ -26,6 +29,12 @@ export default function OpeningCard({ opening }) {
   const [cloudEval, setCloudEval] = useState(null);
   const { analysis, loading: analysisLoading } = useOpeningAnalysis(opening);
   const { strategy } = useAnalysis(opening, activeColor);
+  const { gap, loading: gapLoading } = usePracticalityGap(opening);
+  const { plan: humanPlan, loading: planLoading } = useStrategicTranslation(
+    cloudEval?.fen,
+    cloudEval?.pv,
+    { openingName: opening?.name, evalText: cloudEval?.evalText }
+  );
 
   // Fetch master stats + cloud eval when opening changes
   useEffect(() => {
@@ -144,6 +153,28 @@ export default function OpeningCard({ opening }) {
           )}
         </div>
       </div>
+
+      {/* Practicality Gap / Danger Zone */}
+      {gapLoading && (
+        <LoadingSpinner message="Analyzing practicality gap..." />
+      )}
+      {gap && (
+        <div className={styles.section}>
+          <DangerZone gap={gap} />
+        </div>
+      )}
+
+      {/* Strategic Translation - Human Plan */}
+      {(humanPlan || planLoading) && (
+        <div className={styles.section}>
+          <h4 className={styles.sectionTitle}>Engine&rsquo;s Plan (Translated)</h4>
+          {planLoading ? (
+            <p className={styles.statDetail}>Translating engine moves...</p>
+          ) : humanPlan ? (
+            <p className={styles.humanPlan}>{humanPlan}</p>
+          ) : null}
+        </div>
+      )}
 
       {/* Strategy sections */}
       {strategy && (

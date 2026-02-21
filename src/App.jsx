@@ -1,8 +1,10 @@
 import { lazy, Suspense } from 'react';
 import { AppProvider, useAppState } from './context/AppContext';
+import { useRepertoire } from './hooks/useRepertoire';
 import SearchBar from './components/SearchBar/SearchBar';
 import PlayerInfo from './components/PlayerInfo/PlayerInfo';
 import Dashboard from './components/Dashboard/Dashboard';
+import OpponentScout from './components/OpponentScout/OpponentScout';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import ErrorMessage from './components/common/ErrorMessage';
 import ErrorBoundary from './components/common/ErrorBoundary';
@@ -12,7 +14,8 @@ import styles from './App.module.css';
 const OpeningCard = lazy(() => import('./components/OpeningCard/OpeningCard'));
 
 function AppContent() {
-  const { username, profile, games, gamesLoading, gamesProgress, selectedOpening, error } = useAppState();
+  const { username, profile, games, gamesLoading, gamesProgress, selectedOpening, error, activeColor, sortBy } = useAppState();
+  const { repertoire } = useRepertoire(games, username, activeColor, sortBy);
 
   return (
     <div className={styles.app}>
@@ -53,15 +56,26 @@ function AppContent() {
         {profile && <PlayerInfo profile={profile} />}
 
         {!gamesLoading && profile && games.length > 0 && (
-          <Dashboard games={games} username={username} />
-        )}
+          <div className={styles.splitLayout}>
+            <div className={styles.leftPanel}>
+              <Dashboard games={games} username={username} />
+              <OpponentScout repertoire={repertoire} />
+            </div>
 
-        {selectedOpening && !gamesLoading && (
-          <ErrorBoundary fallbackMessage="Failed to render opening analysis. Try selecting a different opening.">
-            <Suspense fallback={<LoadingSpinner message="Loading analysis..." />}>
-              <OpeningCard opening={selectedOpening} />
-            </Suspense>
-          </ErrorBoundary>
+            <div className={styles.rightPanel}>
+              {selectedOpening ? (
+                <ErrorBoundary fallbackMessage="Failed to render opening analysis. Try selecting a different opening.">
+                  <Suspense fallback={<LoadingSpinner message="Loading analysis..." />}>
+                    <OpeningCard opening={selectedOpening} />
+                  </Suspense>
+                </ErrorBoundary>
+              ) : (
+                <div className={styles.selectPrompt}>
+                  Select an opening from the list to view detailed analysis
+                </div>
+              )}
+            </div>
+          </div>
         )}
 
         {!gamesLoading && profile && games.length === 0 && !error && (
